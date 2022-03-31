@@ -32,35 +32,24 @@ PPM files can be generated using Adobe Photoshop or the Gimp App.
 
 ## System Requirements
 **_In your application you will be required to implement the following features:_**
-1. Load ppm file: - this should allow a ppm file to be loaded into the application, you may
-assume that the “File Type Identifier” will be “P6” and each channel is 1 byte in size. If the
-file does not match this the load function should return false and display an informative
-message.
-
-1.  Save ppm file: - After an image has been modified an option should be available to save the
-image as a ppm file using the format described above,
-• Filter Red: - Should show only the red channel of the image.
-• Filter Green: - Should show only the green channel of the image.
-• Filter Blue: - Should show only the blue channel of the image.
-• Greyscale: - Should change the image to greyscale.
-• Flip Horizontal: - Should flip the image along the centre Y-axis
-• Flip Vertical: - Should flip the image along the centre X-axis
-• Gamma – conversion from float to int for colour channels
-• Other advanced feature
-
-1. **Load and display image:** Should load and display the ppm file.
+1. **Load and display image:** Should allow a ppm file to be loaded into the application, you may
+   assume that the “File Type Identifier” will be “P6” and each channel is 1 byte in size. If the
+   file does not match this the load function should return false and display an informative
+   message.
  
-3. **Greyscale:** Should change the image to greyscale 
+2. **Greyscale:** Should change the image to greyscale 
 
-5. **Save current Image to file:** After an image has been modified an option should be available to save the
-image as a ppm file using the format described above. 
+3. **Save current Image to file:** After an image has been modified an option should be available to save the
+   image as a ppm file using the format described above. 
 
-4. **Flip Horizontal:** Should flip the image along the centre Y-axis
-   **Flip Vertical:**   Should flip the image along the centre X-axis   
+4. 
+*  **Flip Horizontal:** Should flip the image along the centre Y-axis
+*  **Flip Vertical:**   Should flip the image along the centre X-axis   
    
-5. **Filter Red:**      Should show only the red channel of the image.
-•  **Filter Green:**    Should show only the green channel of the image.
-•  **Filter Blue:**     Should show only the blue channel of the image.
+5. 
+*  **Filter Red:**      Should show only the red channel of the image.
+*  **Filter Green:**    Should show only the green channel of the image.
+*  **Filter Blue:**     Should show only the blue channel of the image.
 
 6. **Additional Function 1:**  
 7. **Additional Function 2:**  
