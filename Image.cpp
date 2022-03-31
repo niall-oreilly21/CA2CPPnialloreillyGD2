@@ -120,13 +120,36 @@ void Image::greyScale()
     }
 }
 
-void Image::flipHorizontal()
-{
-}
-
 void Image::flipVertically()
 {
+    for(int row = 0; row < h / 2; row++)
+    {
+        int k = (h - 1) - row;
+
+        for(int column = 0; column < w; column++)
+        {
+            Rgb temp = pixels[(row * w) + column];
+            pixels[(row * w) + column] = pixels[(k * w) + column];
+            pixels[(k * w) + column] = temp;
+        }
+    }
 }
+
+void Image::flipHorizontal()
+{
+    for(int row = 0; row < h; row++)
+    {
+        for(int column = 0; column < w / 2; column++)
+        {
+            int swapColumn = (w - 1) - column;
+
+            Rgb temp = pixels[(row * w) + column];
+            pixels[(row * w) + column] = pixels[(row * w) + swapColumn];
+            pixels[(row * w) + swapColumn] = temp;
+        }
+    }
+}
+
 
 void Image::AdditionalFunction2()
 {
