@@ -20,6 +20,7 @@ struct Rgb
     float r, g, b;
 };
 
+
 class Image {
 
 
@@ -50,13 +51,14 @@ public:
     void AdditionalFunction1();
     void AdditionalFunction2();
     void AdditionalFunction3();
+    Image operator * (const Rgb& otherImage);
+    ~Image();
 
     /*Functions used in the GUI - DO NOT MODIFY */
     Rgb* getImage();
     int getWidth();
     int getHeight();
     int getImageSize();
-    ~Image() { if (pixels != nullptr) delete [] pixels; }
 
 
 };
