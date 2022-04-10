@@ -101,7 +101,6 @@ void processMenu(HWND hWnd, WPARAM wParam)
             image->greyScale(); //comment
              break;
         case IDM_EDIT_FlipHorizontal:
-            //image.load(current_file);
             image->flipHorizontal();
             break;
         case IDM_EDIT_FlipVertical:
