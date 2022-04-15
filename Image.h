@@ -51,6 +51,8 @@ public:
     void AdditionalFunction1();
     void AdditionalFunction2();
     void AdditionalFunction3();
+    void  blurImage();
+
 
     /*Functions used in the GUI - DO NOT MODIFY */
     Rgb* getImage();
@@ -59,6 +61,7 @@ public:
     int getImageSize();
 
 
+    Rgb GetPixel(int i, int i1);
 };
 
 

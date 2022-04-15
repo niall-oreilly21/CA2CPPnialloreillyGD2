@@ -7,6 +7,8 @@
 #include <cstring>
 #include "Image.h"
 #include <bitset>
+#include <fci.h>
+
 using namespace std;
 
 bool Image::load(string filename)
@@ -181,17 +183,52 @@ void Image::flipHorizontal()
     }
 }
 
+void Image :: blurImage()
+{
+    //ref https://stackoverflow.com/questions/30427918/apply-blur-on-bmp-pixel-rgb-array
+    //ref https://www.scratchapixel.com/lessons/digital-imaging/simple-image-manipulations/bookeh-effect
+    //ref https://localcoder.org/bluring-an-image-in-c-c
+
+    double blurValue = 0.11;
+
+    for(int row = 1; row < h - 1; row++)
+    {
+        for(int column = 1; column < w - 1; column++)
+        {
+            int averageValueR = 0;
+            int averageValueG = 0;
+            int averageValueB = 0;
+
+            for(int matrixRow = row - 1; matrixRow <= row + 1; matrixRow++)
+            {
+                for (int matrixColumn = column - 1; matrixColumn <= column + 1; matrixColumn++)
+                {
+                    averageValueR = averageValueR + (blurValue * pixels[(matrixRow * w) + matrixColumn].r);
+                    averageValueG = averageValueG + (blurValue * pixels[(matrixRow * w) + matrixColumn].g);
+                    averageValueB = averageValueB + (blurValue * pixels[(matrixRow * w) + matrixColumn].b);
+
+                }
+            }
+
+            pixels[(row * w) + column].r = averageValueR;
+            pixels[(row * w) + column].g = averageValueG;
+            pixels[(row * w) + column].b = averageValueB;
+        }
+    }
+}
+
 void Image::AdditionalFunction1()
 {
+    blurImage();
 }
 
 void Image::AdditionalFunction2()
 {
+
 }
 
 void Image::AdditionalFunction3()
 {
-
 }
 
 /* Functions used by the GUI - DO NOT MODIFY */
@@ -214,3 +251,4 @@ Rgb* Image::getImage()
 {
     return pixels;
 }
+
