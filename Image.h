@@ -51,7 +51,9 @@ public:
     void AdditionalFunction1();
     void AdditionalFunction2();
     void AdditionalFunction3();
-    void  blurImage();
+    void blurFilter();
+    void invertFilter();
+    void sepiaFilter();
 
 
     /*Functions used in the GUI - DO NOT MODIFY */

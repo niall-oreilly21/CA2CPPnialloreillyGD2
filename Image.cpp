@@ -8,6 +8,8 @@
 #include "Image.h"
 #include <bitset>
 #include <fci.h>
+#include <cmath>
+#define MAX_RGB_VALUE 255
 
 using namespace std;
 
@@ -72,9 +74,27 @@ bool Image::loadRaw(string filename)
             float r,g,b;
             ifs >> r >> g >> b;
 
+//
+//            int newR = 255 * pow(r, 1.0 / 2.2);
+//
+//            this->pixels[i].r = newR;
+//
+//            int newG = 255 * pow(g, 1.0 / 2.2);
+//            this->pixels[i].g = newG;
+//
+//            int newB = 255 * pow(b, 1.0 / 2.2);
+//            this->pixels[i].b = newB;
+
+//            this->pixels[i].r = 255 * pow(r, 1.0 / 2.2);
+//
+//            this->pixels[i].g = 255 * pow(g, 1.0 / 2.2);
+//
+//            this->pixels[i].b = 255 * pow(b, 1.0 / 2.2);
+
             this->pixels[i].r = r * 255;
             this->pixels[i].g = g * 255;
             this->pixels[i].b = b * 255;
+
         }
 
         ifs.close();
@@ -183,13 +203,13 @@ void Image::flipHorizontal()
     }
 }
 
-void Image :: blurImage()
+void Image :: blurFilter()
 {
     //ref https://stackoverflow.com/questions/30427918/apply-blur-on-bmp-pixel-rgb-array
     //ref https://www.scratchapixel.com/lessons/digital-imaging/simple-image-manipulations/bookeh-effect
     //ref https://localcoder.org/bluring-an-image-in-c-c
 
-    double blurValue = 0.11;
+    double blurValue = 0.111;
 
     for(int row = 1; row < h - 1; row++)
     {
@@ -206,7 +226,6 @@ void Image :: blurImage()
                     averageValueR = averageValueR + (blurValue * pixels[(matrixRow * w) + matrixColumn].r);
                     averageValueG = averageValueG + (blurValue * pixels[(matrixRow * w) + matrixColumn].g);
                     averageValueB = averageValueB + (blurValue * pixels[(matrixRow * w) + matrixColumn].b);
-
                 }
             }
 
@@ -217,18 +236,66 @@ void Image :: blurImage()
     }
 }
 
+void Image :: invertFilter()
+{
+    //ref https://dyclassroom.com/image-processing-project/how-to-convert-a-color-image-into-negative
+
+    for (int i = 0; i < getImageSize(); i++)
+    {
+        pixels[i].g = MAX_RGB_VALUE - pixels[i].g;
+        pixels[i].b = MAX_RGB_VALUE - pixels[i].b;
+        pixels[i].r = MAX_RGB_VALUE - pixels[i].r;
+    }
+}
+
+void Image :: sepiaFilter()
+{
+    //ref https://github.com/abhijitnathwani/image-processing/blob/master/image_colortosepia.c
+
+    for (int i = 0; i < getImageSize(); i++)
+    {
+            int currentPixelR = pixels[i].r;
+            int currentPixelG = pixels[i].g;
+            int currentPixelB = pixels[i].b;
+
+            int sepiaR = (currentPixelR * 0.393) + (currentPixelG * 0.769) + (currentPixelB * 0.189);
+            int sepiaG = (currentPixelR * 0.349) + (currentPixelG * 0.686) + (currentPixelB * 0.168);
+            int sepiaB = (currentPixelR * 0.272) + (currentPixelG * 0.534) + (currentPixelB * 0.131);
+
+            if(sepiaR > MAX_RGB_VALUE)
+            {
+                sepiaR = MAX_RGB_VALUE;
+            }
+
+            if(sepiaG > MAX_RGB_VALUE)
+            {
+                sepiaG = MAX_RGB_VALUE;
+            }
+
+            if(sepiaB > MAX_RGB_VALUE)
+            {
+                sepiaB = MAX_RGB_VALUE;
+            }
+
+            pixels[i].r = sepiaR;
+            pixels[i].g = sepiaG;
+            pixels[i].b = sepiaB;
+    }
+}
+
 void Image::AdditionalFunction1()
 {
-    blurImage();
+    blurFilter();
 }
 
 void Image::AdditionalFunction2()
 {
-
+    invertFilter();
 }
 
 void Image::AdditionalFunction3()
 {
+    sepiaFilter();
 }
 
 /* Functions used by the GUI - DO NOT MODIFY */
