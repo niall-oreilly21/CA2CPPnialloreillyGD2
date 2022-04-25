@@ -64,8 +64,6 @@ bool Image::loadRaw(string filename)
 
        ifs >> w >> h;
 
-//        this->w = width;
-//        this->h = height;
         this->pixels = new Rgb[w * h];
         ifs.ignore(256, '\n');
 
@@ -74,27 +72,15 @@ bool Image::loadRaw(string filename)
             float r,g,b;
             ifs >> r >> g >> b;
 
-//
-//            int newR = 255 * pow(r, 1.0 / 2.2);
-//
-//            this->pixels[i].r = newR;
-//
-//            int newG = 255 * pow(g, 1.0 / 2.2);
-//            this->pixels[i].g = newG;
-//
-//            int newB = 255 * pow(b, 1.0 / 2.2);
-//            this->pixels[i].b = newB;
+            //Gamma Encoding
+            unsigned int newR = MAX_RGB_VALUE * pow(r, 1.0 / 2.2);
+            this->pixels[i].r = newR;
 
-//            this->pixels[i].r = 255 * pow(r, 1.0 / 2.2);
-//
-//            this->pixels[i].g = 255 * pow(g, 1.0 / 2.2);
-//
-//            this->pixels[i].b = 255 * pow(b, 1.0 / 2.2);
+            unsigned int newG = MAX_RGB_VALUE * pow(g, 1.0 / 2.2);
+            this->pixels[i].g = newG;
 
-            this->pixels[i].r = r * 255;
-            this->pixels[i].g = g * 255;
-            this->pixels[i].b = b * 255;
-
+            unsigned int newB = MAX_RGB_VALUE * pow(b, 1.0 / 2.2);
+            this->pixels[i].b = newB;
         }
 
         ifs.close();
