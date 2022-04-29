@@ -191,7 +191,7 @@ void Image :: boxBlurFilter()
     //ref https://localcoder.org/bluring-an-image-in-c-c
 
     double blurValue = 0.111;
-    
+
     https://www.bitcoininsider.org/article/70964/computer-vision-busy-developers-convolutions
     for(int row = 1; row < h - 1; row++)
     {
@@ -288,9 +288,9 @@ void Image::gaussianBlur()
      * The Gaussian Blur is similar to the box blur above, except it uses a convolution matrix.
      *
      */
-    int blurConvolutionMatrix[9] = {0, -2, 0,
-                                    -2, 11, -2,
-                                    0, -2, 0};
+    int blurConvolutionMatrix[9] = {1, 2, 1,
+                                    2, 4, 2,
+                                    1, 2, 1};
 
     int convolutionAmount = 0;
     for (int j = 0; j < KERNEL_SIZE; j++)
@@ -333,7 +333,7 @@ void Image::embossFilter()
     //ref https://developer.apple.com/documentation/accelerate/blurring_an_image
 
     /*
-     * The following array of 9 numbers is a convolution matrix or masked used to emboss a image.
+     * The following array of 9 numbers is a convolution matrix or mask used to emboss a image.
      * This is accomplished by doing a convolution(transforming an image) between a kernel and an image.
      */
     int embossConvolutionMatrix[9] = {0,0,0,
