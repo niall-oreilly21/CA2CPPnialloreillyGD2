@@ -10,6 +10,7 @@
 #include <fci.h>
 #include <cmath>
 #define MAX_RGB_VALUE 255
+#define KERNEL_SIZE 9
 
 using namespace std;
 
@@ -69,18 +70,12 @@ bool Image::loadRaw(string filename)
 
         for (int i = 0; i < (w * h); i++)
         {
-            float r,g,b;
+            float r, g, b;
             ifs >> r >> g >> b;
 
-            //Gamma Encoding
-            unsigned int newR = MAX_RGB_VALUE * pow(r, 1.0 / 2.2);
-            this->pixels[i].r = newR;
-
-            unsigned int newG = MAX_RGB_VALUE * pow(g, 1.0 / 2.2);
-            this->pixels[i].g = newG;
-
-            unsigned int newB = MAX_RGB_VALUE * pow(b, 1.0 / 2.2);
-            this->pixels[i].b = newB;
+            this->pixels[i].r = r * MAX_RGB_VALUE;
+            this->pixels[i].g = g * MAX_RGB_VALUE;
+            this->pixels[i].b = b * MAX_RGB_VALUE;
         }
 
         ifs.close();
@@ -189,14 +184,15 @@ void Image::flipHorizontal()
     }
 }
 
-void Image :: blurFilter()
+void Image :: boxBlurFilter()
 {
     //ref https://stackoverflow.com/questions/30427918/apply-blur-on-bmp-pixel-rgb-array
     //ref https://www.scratchapixel.com/lessons/digital-imaging/simple-image-manipulations/bookeh-effect
     //ref https://localcoder.org/bluring-an-image-in-c-c
 
     double blurValue = 0.111;
-
+    
+    https://www.bitcoininsider.org/article/70964/computer-vision-busy-developers-convolutions
     for(int row = 1; row < h - 1; row++)
     {
         for(int column = 1; column < w - 1; column++)
@@ -269,19 +265,151 @@ void Image :: sepiaFilter()
     }
 }
 
-void Image::AdditionalFunction1()
+void Image::additionalFunction1()
 {
-    blurFilter();
+    boxBlurFilter();
 }
 
-void Image::AdditionalFunction2()
+void Image::additionalFunction2()
 {
     invertFilter();
 }
 
-void Image::AdditionalFunction3()
+void Image::additionalFunction3()
 {
     sepiaFilter();
+}
+
+void Image::gaussianBlur()
+{
+    //https://quincemedia.com/2017/10/04/9-types-of-blur-effects-in-after-effects/
+    //https://medium.com/@rlahiri/gaussian-blurring-and-its-importance-in-image-processing-4be8915b85ec
+    /*
+     * The Gaussian Blur is similar to the box blur above, except it uses a convolution matrix.
+     *
+     */
+    int blurConvolutionMatrix[9] = {0, -2, 0,
+                                    -2, 11, -2,
+                                    0, -2, 0};
+
+    int convolutionAmount = 0;
+    for (int j = 0; j < KERNEL_SIZE; j++)
+    {
+        convolutionAmount += blurConvolutionMatrix[j];
+    }
+
+    Rgb* convolutionPixels = nullptr;
+
+    for (int i = w + 1; i < getImageSize() - w; i++)
+    {
+
+
+        convolutionPixels = getConvolutionPixels(i);
+
+        int convolvedPixelR = 0;
+        int convolvedPixelG = 0;
+        int convolvedPixelB = 0;
+
+        // apply the convolution for each of red, green and blue
+        for (int j = 0; j < KERNEL_SIZE; j++)
+        {
+            convolvedPixelR += convolutionPixels[j].r * blurConvolutionMatrix[j];
+            convolvedPixelG += convolutionPixels[j].g * blurConvolutionMatrix[j];
+            convolvedPixelB += convolutionPixels[j].b * blurConvolutionMatrix[j];
+        }
+
+        pixels[i].r = convolvedPixelR / convolutionAmount;
+        pixels[i].g = convolvedPixelG / convolutionAmount;
+        pixels[i].b = convolvedPixelB / convolutionAmount;
+
+    }
+
+    delete[] convolutionPixels;
+}
+
+void Image::embossFilter()
+{
+    //ref https://en.wikipedia.org/wiki/Kernel_(image_processing)#:~:text=In%20image%20processing%2C%20a%20kernel,the%20kernel%20and%20an%20image.
+    //ref https://developer.apple.com/documentation/accelerate/blurring_an_image
+
+    /*
+     * The following array of 9 numbers is a convolution matrix or masked used to emboss a image.
+     * This is accomplished by doing a convolution(transforming an image) between a kernel and an image.
+     */
+    int embossConvolutionMatrix[9] = {0,0,0,
+                                      0,2,-1,
+                                      0,-1,0};
+
+
+    Rgb* convolutionPixels = nullptr;
+
+    for(int i = w + 1; i < getImageSize() - w; i++)
+    {
+        convolutionPixels = getConvolutionPixels(i);
+
+        // do the convolution
+        int convolvedPixelR = 0;
+        int convolvedPixelG = 0;
+        int convolvedPixelB = 0;
+
+        for (int j = 0; j < KERNEL_SIZE; j++)
+        {
+            convolvedPixelR += (convolutionPixels[j].r * embossConvolutionMatrix[j]);
+            convolvedPixelG += (convolutionPixels[j].g * embossConvolutionMatrix[j]);
+            convolvedPixelB += (convolutionPixels[j].b * embossConvolutionMatrix[j]);
+        }
+
+        pixels[i].r = convolvedPixelR + 127;
+        pixels[i].g = convolvedPixelG + 127;
+        pixels[i].b = convolvedPixelB + 127;
+
+    }
+    delete[] convolutionPixels;;
+}
+
+Rgb* Image :: getConvolutionPixels(const int& currentPixel)
+{
+    Rgb* convolutionPixels = new Rgb[KERNEL_SIZE];
+
+    //Gets the current pixel and its eight surrounding pixel values from the original image
+    convolutionPixels[0] = Rgb(pixels[currentPixel - w - 1].r, pixels[currentPixel - w - 1].g, pixels[currentPixel - w - 1].b);
+    convolutionPixels[1] = Rgb(pixels[currentPixel - w].r, pixels[currentPixel - w].g, pixels[currentPixel - w].b);
+    convolutionPixels[2] = Rgb(pixels[currentPixel - w + 1].r, pixels[currentPixel - w + 1].g, pixels[currentPixel - w + 1].b);
+    convolutionPixels[3] = Rgb(pixels[currentPixel - 1].r, pixels[currentPixel - 1].g, pixels[currentPixel - 1].b);
+    convolutionPixels[4] = Rgb(pixels[currentPixel].r, pixels[currentPixel].g, pixels[currentPixel].b);
+    convolutionPixels[5] = Rgb(pixels[currentPixel + 1].r, pixels[currentPixel + 1].g, pixels[currentPixel + 1].b);
+    convolutionPixels[6] = Rgb(pixels[currentPixel + w - 1].r, pixels[currentPixel + w - 1].g, pixels[currentPixel + w - 1].b);
+    convolutionPixels[7] = Rgb(pixels[currentPixel + w].r, pixels[currentPixel + w].g, pixels[currentPixel + w].b);
+    convolutionPixels[8] = Rgb(pixels[currentPixel + w + 1].r, pixels[currentPixel + w + 1].g, pixels[currentPixel + w + 1].b);
+
+    return convolutionPixels;
+}
+
+void Image::gammaEncoding()
+{
+    //ref https://www.cambridgeincolour.com/tutorials/gamma-correction.htm
+
+    /*
+     * Use for RAW files in particular which use linear gamma.
+     * The Standard encoding gamma is 1/2.2
+     */
+    for(int i = 0; i < getImageSize(); i++)
+    {
+        float r,g,b;
+
+        r = static_cast<float>(pixels[i].r) / MAX_RGB_VALUE;
+        g = static_cast<float>(pixels[i].g) / MAX_RGB_VALUE;
+        b = static_cast<float>(pixels[i].b) / MAX_RGB_VALUE;
+
+        unsigned int newR = MAX_RGB_VALUE * pow(r, 1.0 / 2.2);
+        pixels[i].r = newR;
+
+        unsigned int newG = MAX_RGB_VALUE * pow(g, 1.0 / 2.2);
+        pixels[i].g = newG;
+
+        unsigned int newB = MAX_RGB_VALUE * pow(b, 1.0 / 2.2);
+        pixels[i].b = newB;
+    }
 }
 
 /* Functions used by the GUI - DO NOT MODIFY */
@@ -304,4 +432,5 @@ Rgb* Image::getImage()
 {
     return pixels;
 }
+
 

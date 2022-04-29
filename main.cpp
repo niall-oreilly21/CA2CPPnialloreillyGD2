@@ -21,6 +21,9 @@ using namespace std;
 #define IDM_EDIT_AD2 12
 #define IDM_EDIT_AD3 13
 #define IDM_FILE_LOAD_RAW 14
+#define IDM_EDIT_GAUSSIAN_BLUR 15
+#define IDM_EDIT_GAMMA_ENCODE 16
+#define IDM_EDIT_AF 17
 string current_file;
 string fileType;
 // The main window class name.
@@ -46,13 +49,18 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance,
                                                                                                  // more items to the Edit menu;
     AppendMenuW(Alter, MF_STRING, IDM_EDIT_FlipHorizontal, L"&Flip Horizontal"); // Copy this line to add
     AppendMenuW(Alter, MF_STRING, IDM_EDIT_FlipVertical, L"&Flip Vertical"); // Copy this line to add
+    AppendMenuW(Alter, MF_SEPARATOR, 0, NULL);
     AppendMenuW(Alter, MF_STRING, IDM_EDIT_FilterRed, L"&Show Only Red"); // Copy this line to add
     AppendMenuW(Alter, MF_STRING, IDM_EDIT_FilterGreen, L"&Show Only Green"); // Copy this line to add
     AppendMenuW(Alter, MF_STRING, IDM_EDIT_FilterBlue, L"&Show Only Blue"); // Copy this line to add
     AppendMenuW(Alter, MF_SEPARATOR, 0, NULL);
-    AppendMenuW(Alter, MF_STRING, IDM_EDIT_AD1, L"&Blur Filter"); // Copy this line to add
+    AppendMenuW(Alter, MF_STRING, IDM_EDIT_AD1, L"&Box Blur Filter"); // Copy this line to add
     AppendMenuW(Alter, MF_STRING, IDM_EDIT_AD2, L"&Invert Filter"); // Copy this line to add
     AppendMenuW(Alter, MF_STRING, IDM_EDIT_AD3, L"&Sepia Filter"); // Copy this line to add
+    AppendMenuW(Alter, MF_SEPARATOR, 0, NULL);
+    AppendMenuW(Alter, MF_STRING, IDM_EDIT_GAMMA_ENCODE, L"&Gamma Encode 1/2.2"); // Copy this line to add
+    AppendMenuW(Alter, MF_STRING, IDM_EDIT_GAUSSIAN_BLUR, L"&Gaussian Blur Filter"); // Copy this line to add
+    AppendMenuW(Alter, MF_STRING, IDM_EDIT_AF, L"&Emboss Filter"); // Copy this line to add
      // Copy this line to add
 
 
@@ -119,17 +127,27 @@ void processMenu(HWND hWnd, WPARAM wParam)
             image->filterBlue();
             break;
         case IDM_EDIT_AD1:
-
-            image->AdditionalFunction1();
+            image->additionalFunction1();
             break;
         case IDM_EDIT_AD2:
-
-            image->AdditionalFunction2();
+            image->additionalFunction2();
             break;
         case IDM_EDIT_AD3:
-
-            image->AdditionalFunction3();
+            image->additionalFunction3();
             break;
+
+        case IDM_EDIT_GAUSSIAN_BLUR:
+            image->gaussianBlur();
+            break;
+
+        case IDM_EDIT_GAMMA_ENCODE:
+            image->gammaEncoding();
+            break;
+
+        case IDM_EDIT_AF:
+            image->embossFilter();
+            break;
+
         case IDM_EDIT_Reset:
             if(fileType=="ppm")
             {

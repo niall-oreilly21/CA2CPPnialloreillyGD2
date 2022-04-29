@@ -48,13 +48,16 @@ public:
     void greyScale();
     void flipHorizontal();
     void flipVertically();
-    void AdditionalFunction1();
-    void AdditionalFunction2();
-    void AdditionalFunction3();
-    void blurFilter();
+    void additionalFunction1();
+    void additionalFunction2();
+    void additionalFunction3();
+    void boxBlurFilter();
     void invertFilter();
     void sepiaFilter();
-
+    void embossFilter();
+    void gammaEncoding();
+    Rgb * getConvolutionPixels(const int& currentPixel);
+    void gaussianBlur();
 
     /*Functions used in the GUI - DO NOT MODIFY */
     Rgb* getImage();
@@ -62,8 +65,6 @@ public:
     int getHeight();
     int getImageSize();
 
-
-    Rgb GetPixel(int i, int i1);
 };
 
 
