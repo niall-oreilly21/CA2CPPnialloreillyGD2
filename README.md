@@ -51,10 +51,11 @@ PPM files can be generated using Adobe Photoshop or the Gimp App.
 *  **Filter Green:**    Should show only the green channel of the image.
 *  **Filter Blue:**     Should show only the blue channel of the image.
 
-6. **Additional Function 1:**  
-7. **Additional Function 2:**  
-8. **Additional Function 3:**  
+6. **Additional Function 1:** Box Blur Filter   
+7. **Additional Function 2:** Invert Filter 
+8. **Additional Function 3:** Sepia Filter 
  
 10. **Gamma Encoding:** Conversion from float to int for colour channels. 
-11. **Other Advanced feature:**  
+11. **Other Advanced features:** Emboss Filter<br />  &nbsp;  &nbsp;  &nbsp;  &nbsp; &nbsp;  &nbsp;  &nbsp;  &nbsp; &nbsp;  &nbsp;  &nbsp;  &nbsp; &nbsp;  &nbsp;  &nbsp;  &nbsp;&nbsp;  &nbsp;  &nbsp;  &nbsp; &nbsp;  &nbsp;  Gaussian Blur Filter
+                                
 
